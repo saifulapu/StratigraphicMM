@@ -12,6 +12,9 @@ function FaciesMMSimulations(FaciesTransitionProb, facies, num_simulations, sequ
     % Select random simulations to plot
     rand_indices = randperm(num_simulations, num_plots);
 
+    % Generate a new figure for the plots
+    figure;
+
     % Plot each selected simulation
     for i = 1:length(rand_indices)
         index = rand_indices(i);
@@ -27,8 +30,11 @@ function FaciesMMSimulations(FaciesTransitionProb, facies, num_simulations, sequ
         % Calculate transition probabilities
         simulated_transition_probabilities = simulated_transition_counts ./ sum(simulated_transition_counts, 2);
 
-        % Plot the heatmap for each selected simulation
-        subplot(ceil(sqrt(num_plots)), ceil(sqrt(num_plots)), i); % arrange plots in a square layout
+        % Calculate stationary distribution of the simulated sequence
+        simulated_stationary_distribution = calcStationaryDist(simulated_transition_probabilities);
+
+        % Plot the heatmap for the selected simulation
+        subplot(num_plots, 2, 2*i - 1);
         imagesc(simulated_transition_probabilities);    % create a heatmap
         colormap(crameri('batlow'));  % Use the 'batlow' colormap from the crameri package
         colorbar;                             % show a colorbar
@@ -41,5 +47,10 @@ function FaciesMMSimulations(FaciesTransitionProb, facies, num_simulations, sequ
         xticklabels(facies);
         yticks(1:length(facies));
         yticklabels(facies);
+
+        % Call the best fit function with the observed sequence and simulated stationary distribution
+        subplot(num_plots, 2, 2*i);
+        rmse = FaciesModelBestFit(simulated_stationary_distribution, sequence);
+        title(['Best Fit (RMSE: ', num2str(rmse), ')']);
     end
 end
