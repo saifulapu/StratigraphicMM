@@ -6,4 +6,5 @@ The current repository consists of transition probability matrices, stationary d
 
 Only one add-on dependency for the scientific colour visualization:
 Scientific Color Map (crameri function): https://github.com/chadagreene/crameri.git
+
 Crameri, Fabio. (2021). Scientific colour maps (7.0.1). Zenodo. https://doi.org/10.5281/zenodo.5501399
